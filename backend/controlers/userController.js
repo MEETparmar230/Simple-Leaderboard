@@ -2,18 +2,14 @@ import ClaimHistory from "../models/claimHistory.js"
 import User from "../models/user.js"
 
 
-//get users
+//get all users
 export const getUsers= async (req,res)=>{
     try{
-
-    const users = await User.find({});
-    if(users.length===0){
-       return res.status(404).json({message:'no user found'})
         
-    }
+    const users = await User.find({});
+   
     res.status(200).json(users);
     
-   
 }
 catch(err){
     console.log("internal server error",err)
