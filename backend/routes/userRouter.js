@@ -10,6 +10,6 @@ router.get("/",getUsers)
 router.post("/",newUser)
 
 //to increment points
-router.put("/:id",points)
+router.post("/claim",points)
 
 export default router;

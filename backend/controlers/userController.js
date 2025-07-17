@@ -5,7 +5,7 @@ import User from "../models/user.js"
 //get all users
 export const getUsers= async (req,res)=>{
     try{
-        
+
     const users = await User.find({});
    
     res.status(200).json(users);
@@ -37,9 +37,9 @@ export const newUser = async (req,res)=>{
 
 export const points = async(req,res)=>{
 try{
-    const id = req.params.id;
+    const { userId } = req.body;
    
-    const user = await User.findById(id)
+    const user = await User.findById( userId )
 
     if(!user){
         console.log("User not exists")
