@@ -15,8 +15,9 @@ export default function UserList() {
             if(res.data.length===0){
             toast.error("no user")
             }
-            setUsers(res.data)
-             console.log(res.data)
+            const sortedUsers = res.data.sort((a, b) => b.points - a.points);
+            setUsers(sortedUsers)
+             console.log("users fetched")
 
         })
         .catch((err)=>{
