@@ -7,6 +7,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function UserList() {
     const [users,setUsers]  = useState([])
+    const [claims,setClaims]  = useState({})
 
     useEffect(()=>{
         axios.get(`${apiUrl}/user`)
@@ -17,18 +18,47 @@ export default function UserList() {
             setUsers(res.data)
              console.log(res.data)
 
-             
-    
         })
         .catch((err)=>{
             console.log(err)
         })
-
-         
-   
-        
     },[])
 
+   const handleClaim = (userId) =>{
+        
+        axios.post(`${apiUrl}/user/claim`,{userId})
+        .then((res)=>{
+            const { updatedUser, increment } = res.data;
+
+        // Update user's points in the list
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user._id === updatedUser._id ? updatedUser : user
+          )
+        );
+
+        // Show claimed points per user
+         setClaims((prevClaims) => ({
+        ...prevClaims,
+        [userId]: increment,
+      }));
+
+      // ⏱️ Remove the claimed message after 3 seconds
+      setTimeout(() => {
+        setClaims((prevClaims) => {
+          const newClaims = { ...prevClaims };
+          delete newClaims[userId];
+          return newClaims;
+        });
+      }, 2000);
+    })
+
+        .catch((err) => {
+        toast.error("Point can't be claimed");
+        console.error("error:", err);
+      });
+        
+   }
    
   return (
     <div className='mx-auto rounded-md bg-zinc-100 max-w-120 h-screen md:h-fit md:mt-5 p-4'>
@@ -40,10 +70,12 @@ export default function UserList() {
            
              
             <span className='ms-2'>{user.name}</span>
-            <div>{}</div>
+            <div className=''>
+             {claims[user._id] ? `${claims[user._id]} points claimed` : ''}
+             </div>
             <div>
             <span className='me-5'>{user.points}</span>
-            <button className='bg-zinc-500 px-2 rounded-lg text-sm  text-white hover:bg-zinc-600'>Claim</button>
+            <button className='bg-zinc-500 px-2 rounded-lg text-sm  text-white hover:bg-zinc-600' onClick={()=>handleClaim(user._id)}>Claim</button>
             </div>
         </li>
     ))}

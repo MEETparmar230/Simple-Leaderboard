@@ -56,10 +56,10 @@ try{
     //adding claim to cliam history
     await ClaimHistory.create({
       userId: user._id,
-      pointsClaimed: increment
+      claimedPoint: increment
     });
 
-    res.status(200).json({updatedUser,message:'points incremented'})
+    res.status(200).json({updatedUser,increment,message:'points incremented'})
     console.log('points incremented')
     }
 
