@@ -8,7 +8,13 @@ dotenv.config()
 const app = express()
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: [
+      "https://simple-leaderboard-ochre.vercel.app",
+      "http://localhost:5000"
+    ],
+  }
+))
 connectToDB()
 
 const PORT = process.env.PORT
